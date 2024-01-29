@@ -19,9 +19,11 @@ func (m ScreensMethods) ImageScreen() {
 	var imageList []string
 
 	// Loop to retrieve names of all images
-	for i, imageAndLocation := range imageSeparated {
-		if i%2 == 0 {
-			imageList = append(imageList, imageAndLocation)
+	if len(imageSeparated) > 1 {
+		for i, imageAndLocation := range imageSeparated {
+			if i%2 == 0 {
+				imageList = append(imageList, imageAndLocation)
+			}
 		}
 	}
 

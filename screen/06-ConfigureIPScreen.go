@@ -44,8 +44,14 @@ func (m ScreensMethods) ConfigureIPScreenHeading() string {
 func (m ScreensMethods) ConfigureIPScreen() {
 
 	if !(haveMountedSystem) {
-		pterm.Error.Printfln("No system has been mounted")
-		goToScreen(GetCurrentScreen() + 1)
+		screenControlOption := appendScreenControl(make([]string, 0))
+		// Print options to select device to install image
+		selectedOption, _ := pterm.DefaultInteractiveSelect.
+			WithOptions(screenControlOption).
+			Show("No system installed, select what to do: ")
+		if checkSkipScreen(selectedOption) {
+			return
+		}
 		return
 	}
 

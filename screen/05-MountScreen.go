@@ -14,7 +14,14 @@ func (m ScreensMethods) MountScreenHeading() string {
 func (m ScreensMethods) MountScreen() {
 
 	if !(haveInstalledSystem) {
-		goToScreen(GetCurrentScreen() + 1)
+		screenControlOption := appendScreenControl(make([]string, 0))
+		// Print options to select device to install image
+		selectedOption, _ := pterm.DefaultInteractiveSelect.
+			WithOptions(screenControlOption).
+			Show("No system installed, select what to do: ")
+		if checkSkipScreen(selectedOption) {
+			return
+		}
 		return
 	}
 
