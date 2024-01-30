@@ -9,7 +9,8 @@ import (
 )
 
 func showcase(title string, seconds int, content func()) {
-	pterm.DefaultHeader.WithBackgroundStyle(pterm.NewStyle(pterm.BgGreen)).
+	pterm.DefaultHeader.WithBackgroundStyle(pterm.NewStyle(pterm.BgBlue)).
+		WithTextStyle(pterm.NewStyle(pterm.FgWhite, pterm.BgBlue, pterm.Bold)).
 		WithFullWidth().
 		Println(title)
 	pterm.Println()

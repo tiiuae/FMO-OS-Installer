@@ -16,6 +16,7 @@ import (
 const SPACE_CHAR = string(' ')
 const NEW_LINE_CHAR = string('\n')
 
+var WelcomeMsg = "Welcome"
 var OSSfile string
 var Image2Install string
 

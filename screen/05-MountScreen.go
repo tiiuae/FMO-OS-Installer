@@ -1,6 +1,7 @@
 package screen
 
 import (
+	"ghaf-installer/global"
 	"time"
 
 	"github.com/pterm/pterm"
@@ -42,4 +43,17 @@ func (m ScreensMethods) MountScreen() {
 	time.Sleep(1)
 	goToScreen(GetCurrentScreen() + 1)
 	return
+}
+
+func mountGhaf(disk string) {
+	_, err := global.ExecCommand("mkdir", "-p", mountPoint)
+	if err != 0 {
+		panic(err)
+	}
+
+	_, err = global.ExecCommand("sudo", "mount", disk+"p2", mountPoint)
+	if err != 0 {
+		panic(err)
+	}
+	haveMountedSystem = true
 }

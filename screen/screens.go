@@ -1,7 +1,6 @@
 package screen
 
 import (
-	"ghaf-installer/global"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -86,31 +85,4 @@ func InitScreen() {
 		order, _ := strconv.Atoi(fileName[0])
 		Screens[order] = fileName[1]
 	}
-}
-
-func mountGhaf(disk string) {
-	if !(haveInstalledSystem) {
-		return
-	}
-	_, err := global.ExecCommand("mkdir", "-p", mountPoint)
-	if err != 0 {
-		panic(err)
-	}
-
-	_, err = global.ExecCommand("sudo", "mount", disk+"p2", mountPoint)
-	if err != 0 {
-		panic(err)
-	}
-	haveMountedSystem = true
-}
-
-func umountGhaf() {
-	if !(haveMountedSystem) {
-		return
-	}
-	_, err := global.ExecCommand("sudo", "umount", mountPoint)
-	if err != 0 {
-		panic(err)
-	}
-	haveMountedSystem = false
 }

@@ -1,6 +1,7 @@
 package screen
 
 import (
+	"ghaf-installer/global"
 	"time"
 
 	"github.com/pterm/pterm"
@@ -11,8 +12,8 @@ func (m ScreensMethods) WelcomeScreen() {
 	area, _ := pterm.DefaultArea.WithCenter().WithCenter().Start()
 	for i := 0; i < 2; i++ {
 		str, _ := pterm.DefaultBigText.WithLetters(
-			putils.LettersFromStringWithStyle("G", pterm.FgGreen.ToStyle()),
-			putils.LettersFromString("haf")).Srender()
+			putils.LettersFromStringWithStyle("FMO", pterm.FgLightGreen.ToStyle()),
+			putils.LettersFromString("-OS")).Srender()
 		area.Update(str)
 		time.Sleep(time.Second)
 	}
@@ -21,5 +22,5 @@ func (m ScreensMethods) WelcomeScreen() {
 }
 
 func (m ScreensMethods) WelcomeScreenHeading() string {
-	return "Welcome"
+	return global.WelcomeMsg
 }

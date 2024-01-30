@@ -45,3 +45,14 @@ func (m ScreensMethods) ExitScreen() {
 	}
 
 }
+
+func umountGhaf() {
+	if !(haveMountedSystem) {
+		return
+	}
+	_, err := global.ExecCommand("sudo", "umount", mountPoint)
+	if err != 0 {
+		panic(err)
+	}
+	haveMountedSystem = false
+}

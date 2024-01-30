@@ -64,7 +64,7 @@ func prepareEnvironment() {
 
 	paths := strings.Split(string(folderPaths), ";")
 	for _, folderPath := range paths {
-		_, err := global.ExecCommand("sudo", "mkdir", "-p", folderPath)
+		_, err := global.ExecCommand("sudo", "mkdir", "-p", mountPoint+folderPath)
 		if err != 0 {
 			panic(err)
 		}
