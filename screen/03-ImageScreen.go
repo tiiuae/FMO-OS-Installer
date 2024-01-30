@@ -1,7 +1,10 @@
 package screen
 
 import (
+	"bufio"
 	"ghaf-installer/global"
+	"log"
+	"os"
 	"strings"
 
 	"github.com/pterm/pterm"
@@ -14,18 +17,8 @@ func (m ScreensMethods) ImageScreenHeading() string {
 
 func (m ScreensMethods) ImageScreen() {
 	// Image list is a string with format:
-	// <Image 1>||<Path to image 1>||<Image 2>||<Path to image 2>||....
-	imageSeparated := strings.Split(string(global.Images), string("||"))
-	var imageList []string
 
-	// Loop to retrieve names of all images
-	if len(imageSeparated) > 1 {
-		for i, imageAndLocation := range imageSeparated {
-			if i%2 == 0 {
-				imageList = append(imageList, imageAndLocation)
-			}
-		}
-	}
+	imageList, imageMap := readOSSFile(string(global.OSSfile))
 
 	// Add skip options and print option list to select which image to install
 	imageList = appendScreenControl(imageList)
@@ -38,14 +31,36 @@ func (m ScreensMethods) ImageScreen() {
 		return
 	}
 
-	// Get image path based on name
-	for i, imageAndLocation := range imageSeparated {
-		if selectedImage == imageAndLocation {
-			global.Image2Install = imageSeparated[i+1]
-			break
-		}
-	}
+	global.Image2Install = imageMap[selectedImage]
 
 	goToScreen(GetCurrentScreen() + 1)
 
+}
+
+func readOSSFile(OSSPath string) ([]string, map[string]string) {
+
+	file, err := os.Open(OSSPath)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	sc := bufio.NewScanner(file)
+	lines := make([]string, 0)
+	imageNames := make([]string, 0)
+	imageMaps := make(map[string]string)
+	// Read through 'tokens' until an EOF is encountered.
+	for sc.Scan() {
+		lines = append(lines, sc.Text())
+		imageName := strings.Split(sc.Text(), string(";"))[0]
+		imagePath := strings.Split(sc.Text(), string(";"))[1]
+		imageNames = append(imageNames, imageName)
+		imageMaps[imageName] = imagePath
+	}
+
+	if err := sc.Err(); err != nil {
+		log.Fatal(err)
+	}
+	return imageNames, imageMaps
 }

@@ -16,7 +16,7 @@ import (
 const SPACE_CHAR = string(' ')
 const NEW_LINE_CHAR = string('\n')
 
-var Images string
+var OSSfile string
 var Image2Install string
 
 func ExecCommand(cmd string, arg ...string) ([]string, int) {
