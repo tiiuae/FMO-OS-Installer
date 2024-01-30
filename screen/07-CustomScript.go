@@ -4,6 +4,7 @@ import (
 	"errors"
 	"ghaf-installer/global"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/pterm/pterm"
@@ -14,7 +15,7 @@ var customScript = "./script/app"
 var customScriptHeading = "Custom Script"
 
 // Environment variables required for registration-agent-laptop
-var folderPaths = [3]string{"/var/fogdata/certs", "/var/fogdata/config", "/var/fogdata/token"}
+var folderPaths = "/var/fogdata/certs;/var/fogdata/config;/var/fogdata/token"
 
 // Method to get the heading message of screen
 func (m ScreensMethods) CustomScriptHeading() string {
@@ -24,7 +25,7 @@ func (m ScreensMethods) CustomScriptHeading() string {
 func (m ScreensMethods) CustomScript() {
 
 	script_err := false
-	if _, err := os.Stat("/path/to/whatever"); errors.Is(err, os.ErrNotExist) {
+	if _, err := os.Stat(customScript); errors.Is(err, os.ErrNotExist) {
 		pterm.Error.Printfln("Custom script not found!")
 		script_err = true
 	}
@@ -61,7 +62,8 @@ func (m ScreensMethods) CustomScript() {
 func prepareEnvironment() {
 	// Create folder for certificates and config
 
-	for _, folderPath := range folderPaths {
+	paths := strings.Split(string(folderPaths), ";")
+	for _, folderPath := range paths {
 		_, err := global.ExecCommand("sudo", "mkdir", "-p", folderPath)
 		if err != 0 {
 			panic(err)
