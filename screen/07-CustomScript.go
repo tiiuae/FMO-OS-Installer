@@ -25,7 +25,8 @@ func (m ScreensMethods) CustomScriptHeading() string {
 func (m ScreensMethods) CustomScript() {
 
 	script_err := false
-	if _, err := os.Stat(customScript); errors.Is(err, os.ErrNotExist) {
+	command := strings.Split(customScript, global.SPACE_CHAR)[0]
+	if _, err := os.Stat(command); errors.Is(err, os.ErrNotExist) {
 		pterm.Error.Printfln("Custom script not found!")
 		script_err = true
 	}
@@ -51,7 +52,7 @@ func (m ScreensMethods) CustomScript() {
 	prepareEnvironment()
 
 	// Execute registration-agent-laptop binary
-	global.ExecCommandWithLiveMessage("bash", customScript)
+	global.ExecCommandWithLiveMessage("bash", strings.Split(customScript, global.SPACE_CHAR)...)
 
 	// Wait for 3 seconds for user to read the finish log
 	time.Sleep(3)
