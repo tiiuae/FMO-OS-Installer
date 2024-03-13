@@ -39,7 +39,8 @@ func (m ScreensMethods) WifiScreen() {
 		wifiList := wifiConnect[0 : len(wifiConnect)-1]
 		longestWifiSSID := 0
 		for _, wifi := range wifiList {
-			wSSID := strings.Split(string(wifi), ":")[0]
+			wifiMessage := strings.Split(strings.Replace(string(wifi), "\\:", ":", -1), ":")
+			wSSID := strings.Join(wifiMessage[0:len(wifiMessage)-2], ":")
 			if len(wSSID) > longestWifiSSID {
 				longestWifiSSID = len(wSSID)
 			}
@@ -47,14 +48,15 @@ func (m ScreensMethods) WifiScreen() {
 		var wifiListBeautified []string
 
 		for _, wifi := range wifiList {
-			wSSID := strings.Split(string(wifi), ":")[0]
-			wSignal := strings.Split(string(wifi), ":")[1]
+			wifiMessage := strings.Split(strings.Replace(string(wifi), "\\:", ":", -1), ":")
+			wSSID := strings.Join(wifiMessage[0:len(wifiMessage)-2], ":")
+			wSignal := wifiMessage[len(wifiMessage)-2]
+			wSecurity := wifiMessage[len(wifiMessage)-1]
 			wSSIDBeautified := wSSID + strings.Repeat(
 				" ",
 				longestWifiSSID+2-len(wSSID),
 			)
 			wSignalBeautified := wSignal + strings.Repeat(" ", 8-len(wSignal))
-			wSecurity := strings.Split(string(wifi), ":")[2]
 			wifiListBeautified = append(
 				wifiListBeautified,
 				wSSIDBeautified+"||"+wSignalBeautified+"||"+wSecurity,
