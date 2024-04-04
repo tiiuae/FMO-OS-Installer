@@ -27,6 +27,9 @@ var screenDir = sourceDir + "/screen"
 var dataDir = sourceDir + "/data"
 var mountPoint = "/home/ghaf/root"
 
+var envPath = "./.env"
+var networkInterface = ""
+
 func GetCurrentScreen() int {
 	return currentInstallationScreen
 }
