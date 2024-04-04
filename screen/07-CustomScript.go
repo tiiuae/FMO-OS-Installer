@@ -61,9 +61,25 @@ func (m ScreensMethods) CustomScript() {
 }
 
 func prepareEnvironment() {
-	// Create folder for certificates and config
-
 	paths := strings.Split(string(folderPaths), ";")
+	checkEnvFile := strings.Split(paths[0], "/")
+	if checkEnvFile[len(checkEnvFile)-1] == ".env" {
+		envPath = strings.Split(string(folderPaths), ";")[0]
+		f, err := os.OpenFile(envPath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+		if err != nil {
+			panic(err)
+		}
+
+		defer f.Close()
+
+		if _, err = f.WriteString("NETWORK_INTERFACE=" + networkInterface); err != nil {
+			panic(err)
+		}
+
+		paths = paths[1:]
+	}
+
+	// Create folder for certificates and config
 	for _, folderPath := range paths {
 		_, err := global.ExecCommand("sudo", "mkdir", "-p", folderPath)
 		if err != 0 {

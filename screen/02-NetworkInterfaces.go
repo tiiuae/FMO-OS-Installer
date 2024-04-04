@@ -2,17 +2,41 @@ package screen
 
 import (
 	"ghaf-installer/global"
+	"os"
 	"strings"
 
 	"github.com/pterm/pterm"
 )
 
 // Method to get the heading message of screen
-func (m ScreensMethods) WifiScreenHeading() string {
+func (m ScreensMethods) NetworkInterfacesHeading() string {
 	return "Connect to network"
 }
 
-func (m ScreensMethods) WifiScreen() {
+func (m ScreensMethods) NetworkInterfaces() {
+	// List all network devices
+	networkInterfaces, _ := os.ReadDir("/sys/class/net")
+	var networkInterfaceList []string
+	for _, file := range networkInterfaces {
+		networkInterfaceList = append(networkInterfaceList, file.Name())
+	}
+
+	// Select network device
+	networkInterface, _ = pterm.DefaultInteractiveSelect.
+		WithMaxHeight(20).
+		WithOptions(networkInterfaceList).
+		Show("Select network interface")
+
+	// If the device is wireless
+	if _, err := os.Stat("/sys/class/net/" + networkInterface + "/wireless"); !os.IsNotExist(err) {
+		WifiScreen()
+		return
+	}
+
+	goToScreen(GetCurrentScreen() + 1)
+}
+
+func WifiScreen() {
 
 	wifiConnectSpinner, _ := pterm.DefaultSpinner.
 		WithShowTimer(false).
