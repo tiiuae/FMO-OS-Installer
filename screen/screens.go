@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/pterm/pterm"
 )
 
 type ScreensMethods struct{}
@@ -25,10 +27,14 @@ var Screens = make(map[int]string)
 var sourceDir = "."
 var screenDir = sourceDir + "/screen"
 var dataDir = sourceDir + "/data"
-var mountPoint = "/home/ghaf/root"
+var mountPoint = "/home/huy/root"
 
 var envPath = "./.env"
 var networkInterface = ""
+
+// Docker URL selections
+var dockerURL = []string{"ghcr.io", "cr.airoplatform.com"}
+var dockerURLPath = "/var/fogdata/cr.url"
 
 func GetCurrentScreen() int {
 	return currentInstallationScreen
@@ -88,4 +94,16 @@ func InitScreen() {
 		order, _ := strconv.Atoi(fileName[0])
 		Screens[order] = fileName[1]
 	}
+}
+
+func RefreshScreen(title string) {
+
+	print("\033[H\033[2J")
+
+	pterm.DefaultHeader.WithBackgroundStyle(pterm.NewStyle(pterm.BgBlue)).
+		WithTextStyle(pterm.NewStyle(pterm.FgWhite, pterm.BgBlue, pterm.Bold)).
+		WithFullWidth().
+		Println(title)
+	pterm.Println()
+
 }
