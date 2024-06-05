@@ -4,6 +4,7 @@ import (
 	"errors"
 	"ghaf-installer/global"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -36,6 +37,7 @@ func (m ScreensMethods) CustomScript() {
 		script_err = true
 	}
 
+	selectDockerURL()
 	if script_err {
 		screenControlOption := appendScreenControl(make([]string, 0))
 		// Print options to select device to install image
@@ -48,6 +50,7 @@ func (m ScreensMethods) CustomScript() {
 		return
 	}
 
+	RefreshScreen(customScriptHeading)
 	// Set create folders to store certificates
 	prepareEnvironment()
 
@@ -86,4 +89,45 @@ func prepareEnvironment() {
 			panic(err)
 		}
 	}
+}
+
+func selectDockerURL() {
+	selectURL, _ := pterm.DefaultInteractiveSelect.
+		WithOptions(dockerURL).
+		Show("Please select docker URL")
+
+	_, err_int := global.ExecCommand("mkdir", "-p", filepath.Dir(mountPoint+dockerURLPath))
+	if err_int != 0 {
+		panic(err_int)
+	}
+
+	f, err := os.Create(mountPoint + dockerURLPath)
+	if err != nil {
+		panic(err)
+	}
+
+	defer func() {
+		f.Close()
+	}()
+
+	_, err = f.WriteString(selectURL)
+	if err != nil {
+		panic(err)
+	}
+
+	err = f.Close()
+	if err != nil {
+		panic(err)
+	}
+
+	_, err_int = global.ExecCommand(
+		"sudo",
+		"chmod",
+		"644",
+		mountPoint+dockerURLPath,
+	)
+	if err_int != 0 {
+		panic(err)
+	}
+
 }
