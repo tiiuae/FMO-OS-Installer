@@ -93,7 +93,7 @@ func prepareEnvironment() {
 
 func selectDockerURL() {
 	selectURL, _ := pterm.DefaultInteractiveSelect.
-		WithOptions(dockerURL).
+		WithOptions(strings.Split(dockerURLs, "*")).
 		Show("Please select docker URL")
 
 	_, err_int := global.ExecCommand("mkdir", "-p", filepath.Dir(mountPoint+dockerURLPath))

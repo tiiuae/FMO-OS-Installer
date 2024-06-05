@@ -33,7 +33,7 @@ var envPath = "./.env"
 var networkInterface = ""
 
 // Docker URL selections
-var dockerURL = []string{"ghcr.io", "cr.airoplatform.com"}
+var dockerURLs = "ghcr.io*cr.airoplatform.com"
 var dockerURLPath = "/var/fogdata/cr.url"
 
 func GetCurrentScreen() int {
