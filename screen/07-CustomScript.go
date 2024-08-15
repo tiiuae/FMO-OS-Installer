@@ -78,13 +78,25 @@ func prepareEnvironment() {
 		if _, err = f.WriteString("NETWORK_INTERFACE=" + networkInterface); err != nil {
 			panic(err)
 		}
-
-		paths = paths[1:]
 	}
 
-	// Create folder for certificates and config
+	// Symlink to simulate installed system
+	symlink := paths[1]
+	// Source location of installed system
+	source := paths[2]
+	_, err := global.ExecCommand("sudo", "mkdir", "-p", mountPoint+source)
+	if err != 0 {
+		panic(err)
+	}
+	_, err = global.ExecCommand("sudo", "ln", "-s", mountPoint+source, symlink)
+	if err != 0 {
+		panic(err)
+	}
+
+	// Create child folders for certificates and config
+	paths = paths[3:]
 	for _, folderPath := range paths {
-		_, err := global.ExecCommand("sudo", "mkdir", "-p", folderPath)
+		_, err := global.ExecCommand("sudo", "mkdir", "-p", mountPoint+folderPath)
 		if err != 0 {
 			panic(err)
 		}
