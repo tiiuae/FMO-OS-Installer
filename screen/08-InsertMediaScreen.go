@@ -31,14 +31,18 @@ func (m ScreensMethods) InsertMediaScreen() {
 
 	/***************** select media ********************/
 	selectedOption := SelectOption()
+	pterm.info.printfln("selected option: %s\n", selectedOption)
 
-	for selectedOption != updateDriversStr {
+	for selectedOption == updateDriversStr {
 		// If a skip option selected
 		if checkSkipScreen(selectedOption) {
+			pterm.Info.Printfln("Skip containers preload...")
+			time.Sleep(3)
 			return
 		}
 
 		selectedOption = SelectOption()
+		pterm.info.printfln("selected option: %s\n", selectedOption)
 	}
 
 	/***************** select media ********************/
