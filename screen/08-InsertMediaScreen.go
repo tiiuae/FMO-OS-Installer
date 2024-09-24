@@ -60,7 +60,7 @@ func (m ScreensMethods) InsertMediaScreen() {
 
 	/***************** start copying *******************/
 	/***************** umount media ********************/
-	ghafMountingSpinner, _ := pterm.DefaultSpinner.
+	ghafMountingSpinner, _ = pterm.DefaultSpinner.
 		WithShowTimer(false).
 		WithRemoveWhenDone(true).
 		Start("Mounting Partition")
