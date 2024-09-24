@@ -34,7 +34,7 @@ func (m ScreensMethods) InsertMediaScreen() {
 	return
 }
 
-func string SelectOption() {
+func SelectOption() string {
 	var drivesList []string
 	var drivesListHeading string
 
