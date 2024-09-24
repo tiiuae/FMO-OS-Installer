@@ -15,6 +15,20 @@ func (m ScreensMethods) InsertMediaScreenHeading() string {
 }
 
 func (m ScreensMethods) InsertMediaScreen() {
+	/***************** check installaion ***************/
+	if !(haveInstalledSystem) || !(haveMountedSystem) {
+		screenControlOption := appendScreenControl(make([]string, 0))
+		// Print options to select device to install image
+		selectedOption, _ := pterm.DefaultInteractiveSelect.
+			WithOptions(screenControlOption).
+			Show("No system installed, select what to do: ")
+		if checkSkipScreen(selectedOption) {
+			return
+		}
+		return
+	}
+
+	/***************** select media ********************/
 	selectedOption := SelectOption()
 
 	for selectedOption != updateDriversStr {
@@ -26,9 +40,39 @@ func (m ScreensMethods) InsertMediaScreen() {
 		selectedOption = SelectOption()
 	}
 
+	/***************** select media ********************/
+	/***************** mount media *********************/
+	ghafMountingSpinner, _ := pterm.DefaultSpinner.
+		WithShowTimer(false).
+		WithRemoveWhenDone(true).
+		Start("Mounting Partition")
 
+	// Mount ghaf system
+	mountMedia("/dev/" + selectedPartition, "/media/fmoos-containers")
 
-	/***************** Start Installing *******************/
+	// Wait time for user to read the message
+	time.Sleep(2)
+	ghafMountingSpinner.Stop()
+
+	pterm.Info.Printfln("Containers has been mounted..")
+	time.Sleep(1)
+
+	/***************** start copying *******************/
+	/***************** umount media ********************/
+	ghafMountingSpinner, _ := pterm.DefaultSpinner.
+		WithShowTimer(false).
+		WithRemoveWhenDone(true).
+		Start("Mounting Partition")
+
+	// Umount media
+	umountMedia("/media/fmoos-containers")
+
+	// Wait time for user to read the message
+	time.Sleep(2)
+	ghafMountingSpinner.Stop()
+
+	pterm.Info.Printfln("Containers has been umounted..")
+	time.Sleep(1)
 
 	goToScreen(GetCurrentScreen() + 1)
 	return
@@ -59,4 +103,23 @@ func SelectOption() string {
 		Show("Please select device with FMO-OS preloaded containers\n" + drivesListHeading)
 
 	return selectedOption
+}
+
+func mountMedia(disk string, mounPoint string) {
+	_, err := global.ExecCommand("mkdir", "-p", mountPoint)
+	if err != 0 {
+		panic(err)
+	}
+
+	_, err = global.ExecCommand("sudo", "mount", disk, mountPoint)
+	if err != 0 {
+		panic(err)
+	}
+}
+
+func umountMedia(mounPoint string) {
+	_, err = global.ExecCommand("sudo", "umount", mountPoint)
+	if err != 0 {
+		panic(err)
+	}
 }
