@@ -7,45 +7,56 @@ import (
 	"github.com/pterm/pterm"
 )
 
+var updateDriversStr = "Update drivers list"
+
 // Method to get the heading message of screen
 func (m ScreensMethods) InsertMediaScreenHeading() string {
-	return "Select docker preloaded media to install"
+	return "Select docker preloaded media to install\n"
 }
 
 func (m ScreensMethods) InsertMediaScreen() {
-	var drivesList []string
-	var drivesListHeading string
+	selectedOption := select_option()
 
-	drivesList = appendScreenControl(drivesList)
-
-	// If no images are selected to install
-	if len(global.Image2Install) == 0 {
-		pterm.Error.Printfln("No image is selected for the installation")
-	} else {
-		// Get all block devices
-		drives, _ := global.ExecCommand("lsblk", "-d", "-e7")
-		if len(drives) > 0 {
-			drivesListHeading = "  " + drives[0]
-			for _, d := range drives[1:len(drives)-1] {
-				if strings.Contains(d, "nvme") {
-					drivesList = append(drivesList, d)
-				}
-			}
+	for selectedOption != updateDriversStr {
+		// If a skip option selected
+		if checkSkipScreen(selectedOption) {
+			return
 		}
+
+		selectedOption = select_option()
 	}
 
-	// Print options to select device to install image
-	selectedOption, _ := pterm.DefaultInteractiveSelect.
-		WithOptions(drivesList).
-		Show("Please select device to install Ghaf \n  " + drivesListHeading)
 
-	// If a skip option selected
-	if checkSkipScreen(selectedOption) {
-		return
-	}
 
 	/***************** Start Installing *******************/
 
 	goToScreen(GetCurrentScreen() + 1)
 	return
+}
+
+func string select_option() {
+	var drivesList []string
+	var drivesListHeading string
+
+	drivesList = appendScreenControl(drivesList)
+
+	// Get all block devices
+	drives, _ := global.ExecCommand("lsblk", "-d", "-e7", "-o", "name,label")
+	if len(drives) > 0 {
+		drivesListHeading = "  " + drives[0]
+		for _, d := range drives[1:len(drives)-1] {
+			if strings.Contains(d, "fmoos-containers") {
+				drivesList = append(drivesList, d)
+			}
+		}
+	} else {
+		drivesList = append(drivesList, updateDriversStr)
+	}
+
+	// Print options to select device to install image
+	selectedOption, _ := pterm.DefaultInteractiveSelect.
+		WithOptions(drivesList).
+		Show("Please select device with FMO-OS preloaded containers\n" + drivesListHeading)
+
+	return selectedOption
 }
