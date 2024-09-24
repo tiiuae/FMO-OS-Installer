@@ -1,13 +1,7 @@
 package screen
 
 import (
-	"bufio"
-	"bytes"
 	"ghaf-installer/global"
-	"io"
-	"os"
-	"os/exec"
-	"strconv"
 	"strings"
 
 	"github.com/pterm/pterm"
