@@ -15,7 +15,7 @@ func (m ScreensMethods) InsertMediaScreenHeading() string {
 }
 
 func (m ScreensMethods) InsertMediaScreen() {
-	selectedOption := select_option()
+	selectedOption := SelectOption()
 
 	for selectedOption != updateDriversStr {
 		// If a skip option selected
@@ -23,7 +23,7 @@ func (m ScreensMethods) InsertMediaScreen() {
 			return
 		}
 
-		selectedOption = select_option()
+		selectedOption = SelectOption()
 	}
 
 
@@ -34,7 +34,7 @@ func (m ScreensMethods) InsertMediaScreen() {
 	return
 }
 
-func string select_option() {
+func string SelectOption() {
 	var drivesList []string
 	var drivesListHeading string
 
