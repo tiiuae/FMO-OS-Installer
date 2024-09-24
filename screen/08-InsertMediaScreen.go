@@ -45,6 +45,13 @@ func (m ScreensMethods) InsertMediaScreen() {
 		pterm.Info.Printfln("selected option: %s", selectedOption)
 	}
 
+	// If a skip option selected
+	if checkSkipScreen(selectedOption) {
+		pterm.Info.Printfln("Skip containers preload...")
+		time.Sleep(3)
+		return
+	}
+
 	/***************** select media ********************/
 	/***************** mount media *********************/
 	ghafMountingSpinner, _ := pterm.DefaultSpinner.
