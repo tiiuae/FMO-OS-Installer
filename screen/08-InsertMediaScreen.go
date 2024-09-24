@@ -15,7 +15,7 @@ import (
 
 // Method to get the heading message of screen
 func (m ScreensMethods) PartitionScreenHeading() string {
-	return "Select partitions and install"
+	return "Select docker preloaded media to install"
 }
 
 func (m ScreensMethods) PartitionScreen() {
