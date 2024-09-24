@@ -31,7 +31,7 @@ func (m ScreensMethods) InsertMediaScreen() {
 
 	/***************** select media ********************/
 	selectedOption := SelectOption()
-	pterm.info.printfln("selected option: %s\n", selectedOption)
+	pterm.Info.Printfln("selected option: %s", selectedOption)
 
 	for selectedOption == updateDriversStr {
 		// If a skip option selected
@@ -42,7 +42,7 @@ func (m ScreensMethods) InsertMediaScreen() {
 		}
 
 		selectedOption = SelectOption()
-		pterm.info.printfln("selected option: %s\n", selectedOption)
+		pterm.Info.Printfln("selected option: %s", selectedOption)
 	}
 
 	/***************** select media ********************/
