@@ -3,6 +3,7 @@ package screen
 import (
 	"ghaf-installer/global"
 	"strings"
+	"time"
 
 	"github.com/pterm/pterm"
 )
@@ -83,6 +84,7 @@ func SelectOption() string {
 	var drivesListHeading string
 
 	drivesList = appendScreenControl(drivesList)
+	drivesList = append(drivesList, updateDriversStr)
 
 	// Get all block devices
 	drives, _ := global.ExecCommand("lsblk", "-d", "-e7", "-o", "name,label")
@@ -93,8 +95,6 @@ func SelectOption() string {
 				drivesList = append(drivesList, d)
 			}
 		}
-	} else {
-		drivesList = append(drivesList, updateDriversStr)
 	}
 
 	// Print options to select device to install image
