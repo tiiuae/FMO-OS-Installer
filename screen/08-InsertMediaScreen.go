@@ -59,6 +59,21 @@ func (m ScreensMethods) InsertMediaScreen() {
 	time.Sleep(1)
 
 	/***************** start copying *******************/
+	ghafMountingSpinner, _ = pterm.DefaultSpinner.
+		WithShowTimer(false).
+		WithRemoveWhenDone(true).
+		Start("Mounting Partition")
+
+	// Umount media
+	copyData("/media/fmoos-containers" + "/*", mountPoint + "/var/fogdata/preloaded")
+
+	// Wait time for user to read the message
+	time.Sleep(2)
+	ghafMountingSpinner.Stop()
+
+	pterm.Info.Printfln("Containers has been copied..")
+	time.Sleep(1)
+
 	/***************** umount media ********************/
 	ghafMountingSpinner, _ = pterm.DefaultSpinner.
 		WithShowTimer(false).
@@ -77,6 +92,18 @@ func (m ScreensMethods) InsertMediaScreen() {
 
 	goToScreen(GetCurrentScreen() + 1)
 	return
+}
+
+func copyData(from string, to string) {
+	_, err := global.ExecCommand("mkdir", "-p", to)
+	if err != 0 {
+		panic(err)
+	}
+
+	_, err = global.ExecCommand("sudo", "cp", "-r", from, to)
+	if err != 0 {
+		panic(err)
+	}
 }
 
 func SelectOption() string {
