@@ -118,7 +118,7 @@ func mountMedia(disk string, mounPoint string) {
 }
 
 func umountMedia(mounPoint string) {
-	_, err = global.ExecCommand("sudo", "umount", mountPoint)
+	_, err := global.ExecCommand("sudo", "umount", mountPoint)
 	if err != 0 {
 		panic(err)
 	}
