@@ -14,11 +14,11 @@ import (
 )
 
 // Method to get the heading message of screen
-func (m ScreensMethods) PartitionScreenHeading() string {
+func (m ScreensMethods) InsertMediaScreenHeading() string {
 	return "Select docker preloaded media to install"
 }
 
-func (m ScreensMethods) PartitionScreen() {
+func (m ScreensMethods) InsertMediaScreen() {
 	var drivesList []string
 	var drivesListHeading string
 
@@ -52,86 +52,6 @@ func (m ScreensMethods) PartitionScreen() {
 
 	/***************** Start Installing *******************/
 
-	selectedPartition = strings.TrimSpace(
-		strings.Split(string(selectedOption), global.SPACE_CHAR)[0],
-	)
-	pterm.Info.Printfln("Selected: %s", pterm.Green(selectedPartition))
-	writeImage := "dd if=" + global.Image2Install +
-		" of=/dev/" + selectedPartition +
-		" conv=sync bs=4K status=progress"
-
-	cmd := exec.Command("sudo", strings.Split(writeImage, " ")...)
-	progress, _ := cmd.StderrPipe()
-
-	cmd.Start()
-
-	drawInstallingProgress(progress)
-	cmd.Wait()
-
-	// dd command finished
-	progress.Close()
-	haveInstalledSystem = true
-	pterm.Info.Printfln("Installation Completed")
-
 	goToScreen(GetCurrentScreen() + 1)
 	return
-}
-
-func drawInstallingProgress(progress io.ReadCloser) {
-	image, _ := os.Stat(global.Image2Install)
-	imageSize := image.Size()
-	p, _ := pterm.DefaultProgressbar.
-		WithTotal(int(imageSize)).
-		WithTitle("Copied").
-		Start()
-	lastProgessbarValue := int(0)
-
-	scanner := bufio.NewScanner(progress)
-	scanner.Split(customLineSplit)
-
-	for scanner.Scan() {
-		progress := (strings.Split(scanner.Text(), global.SPACE_CHAR))
-		if len(progress) == 11 {
-			current, err := strconv.Atoi(progress[0])
-			if err != nil {
-				continue
-			}
-			p.Add((current - lastProgessbarValue))
-			lastProgessbarValue = current
-		}
-	}
-}
-
-// dropCR drops a terminal \r from the data.
-func dropCR(data []byte) []byte {
-	if len(data) > 0 && data[len(data)-1] == '\r' {
-		return data[0 : len(data)-1]
-	}
-	return data
-}
-
-func customLineSplit(
-	data []byte,
-	atEOF bool,
-) (advance int, token []byte, err error) {
-	if atEOF && len(data) == 0 {
-		return 0, nil, nil
-	}
-
-	if i := bytes.IndexByte(data, '\n'); i >= 0 {
-		// We have a full newline-terminated line.
-		return i + 1, dropCR(data[0:i]), nil
-	}
-
-	if i := bytes.IndexByte(data, '\r'); i >= 0 {
-		// We have a full newline-terminated line.
-		return i + 1, dropCR(data[0:i]), nil
-	}
-
-	// If we're at EOF, we have a final, non-terminated line. Return it.
-	if atEOF {
-		return len(data), dropCR(data), nil
-	}
-	// Request more data.
-	return 0, nil, nil
 }
