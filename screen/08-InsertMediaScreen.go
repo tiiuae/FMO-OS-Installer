@@ -2,7 +2,6 @@ package screen
 
 import (
 	"ghaf-installer/global"
-	"os/exec"
 	"strings"
 	"time"
 	"os"
@@ -168,10 +167,29 @@ func resizeRootFs(disk string, mountPoint string) {
       return
   }
 
-  exec.Command("sudo", "bash", "./resize.sh")
-  exec.Command("sudo", "e2fsck", "-f", disk + "p2")
-  exec.Command("sudo", "resize2fs", disk + "p2")
+	pterm.Info.Printfln("sudo bash ./resize.sh")
+  msg, er := global.ExecCommand("sudo", "bash", "./resize.sh")
+	pterm.Info.Printfln(msg)
+	if er != 0 {
+		pterm.Info.Printfln("sudo bash ./resize.sh failed..")
+		panic(er)
+	}
 
+	pterm.Info.Printfln("sudo", "e2fsck -f %s", disk + "p2")
+  msg, er := global.ExecCommand("sudo", "e2fsck", "-f", disk + "p2")
+	pterm.Info.Printfln(msg)
+	if er != 0 {
+		pterm.Info.Printfln("sudo", "e2fsck -f %s failed..", disk + "p2")
+		panic(er)
+	}
+
+	pterm.Info.Printfln("sudo resize2fs %s", disk + "p2")
+  msg, er := global.ExecCommand("sudo", "resize2fs", disk + "p2")
+	pterm.Info.Printfln(msg)
+	if er != 0 {
+		pterm.Info.Printfln("sudo resize2fs %s failed..", disk + "p2")
+		panic(er)
+	}
 
 	mountMedia(disk + "p2", mountPoint)
 }
