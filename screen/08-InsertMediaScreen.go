@@ -55,7 +55,7 @@ func (m ScreensMethods) InsertMediaScreen() {
 	/***************** select media ********************/
 	/***************** mount media *********************/
 	pterm.Info.Printfln("Use %s for preloaded containers", selectedOption)
-	dev = strings.TrimSpace(
+	dev := strings.TrimSpace(
 		strings.Split(string(selectedOption), global.SPACE_CHAR)[0],
 	)
 	pterm.Info.Printfln("Use %s for preloaded containers", dev)
