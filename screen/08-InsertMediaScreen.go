@@ -112,13 +112,17 @@ func (m ScreensMethods) InsertMediaScreen() {
 }
 
 func copyData(from string, to string) {
+	pterm.Info.Printfln("mkdir -p %s", to)
 	_, err := global.ExecCommand("mkdir", "-p", to)
 	if err != 0 {
+		pterm.Info.Printfln("mkdir -p %s failed..", to)
 		panic(err)
 	}
 
+	pterm.Info.Printfln("sudo cp -r %s %s", from, to)
 	_, err = global.ExecCommand("sudo", "cp", "-r", from, to)
 	if err != 0 {
+		pterm.Info.Printfln("sudo cp -r %s %s failed..", from, to)
 		panic(err)
 	}
 }
@@ -150,20 +154,26 @@ func SelectOption() string {
 }
 
 func mountMedia(disk string, mounPoint string) {
+	pterm.Info.Printfln("mkdir -p %s", mountPoint)
 	_, err := global.ExecCommand("mkdir", "-p", mountPoint)
 	if err != 0 {
+		pterm.Info.Printfln("mkdir -p %s failed..", mountPoint)
 		panic(err)
 	}
 
+	pterm.Info.Printfln("sudo mount %s %s", disk, mountPoint)
 	_, err = global.ExecCommand("sudo", "mount", disk, mountPoint)
 	if err != 0 {
+	pterm.Info.Printfln("sudo mount %s %s failed..", disk, mountPoint)
 		panic(err)
 	}
 }
 
 func umountMedia(mounPoint string) {
+	pterm.Info.Printfln("sudo umount %s", mountPoint)
 	_, err := global.ExecCommand("sudo", "umount", mountPoint)
 	if err != 0 {
+		pterm.Info.Printfln("sudo umount %s failed", mountPoint)
 		panic(err)
 	}
 }
