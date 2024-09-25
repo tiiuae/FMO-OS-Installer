@@ -54,13 +54,19 @@ func (m ScreensMethods) InsertMediaScreen() {
 
 	/***************** select media ********************/
 	/***************** mount media *********************/
+	pterm.Info.Printfln("Use %s for preloaded containers", selectedOption)
+	dev = strings.TrimSpace(
+		strings.Split(string(selectedOption), global.SPACE_CHAR)[0],
+	)
+	pterm.Info.Printfln("Use %s for preloaded containers", dev)
+
 	ghafMountingSpinner, _ := pterm.DefaultSpinner.
 		WithShowTimer(false).
 		WithRemoveWhenDone(true).
 		Start("Mounting Partition")
 
 	// Mount ghaf system
-	mountMedia("/dev/" + selectedPartition, "/media/fmoos-containers")
+	mountMedia("/dev/" + dev, "/media/fmoos-containers")
 
 	// Wait time for user to read the message
 	time.Sleep(2)
