@@ -169,23 +169,29 @@ func resizeRootFs(disk string, mountPoint string) {
 
 	pterm.Info.Printfln("sudo bash ./resize.sh")
   msg, er := global.ExecCommand("sudo", "bash", "./resize.sh")
-	pterm.Info.Printfln(msg)
+  for _, m := range msg {
+		pterm.Info.Printfln(m)
+	}
 	if er != 0 {
 		pterm.Info.Printfln("sudo bash ./resize.sh failed..")
 		panic(er)
 	}
 
 	pterm.Info.Printfln("sudo", "e2fsck -f %s", disk + "p2")
-  msg, er := global.ExecCommand("sudo", "e2fsck", "-f", disk + "p2")
-	pterm.Info.Printfln(msg)
+  msg, er = global.ExecCommand("sudo", "e2fsck", "-f", disk + "p2")
+  for _, m := range msg {
+		pterm.Info.Printfln(m)
+	}
 	if er != 0 {
 		pterm.Info.Printfln("sudo", "e2fsck -f %s failed..", disk + "p2")
 		panic(er)
 	}
 
 	pterm.Info.Printfln("sudo resize2fs %s", disk + "p2")
-  msg, er := global.ExecCommand("sudo", "resize2fs", disk + "p2")
-	pterm.Info.Printfln(msg)
+  msg, er = global.ExecCommand("sudo", "resize2fs", disk + "p2")
+  for _, m := range msg {
+		pterm.Info.Printfln(m)
+	}
 	if er != 0 {
 		pterm.Info.Printfln("sudo resize2fs %s failed..", disk + "p2")
 		panic(er)
