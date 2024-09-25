@@ -5,6 +5,7 @@ import (
 	"os/exec"
 	"strings"
 	"time"
+	"os"
 
 	"github.com/pterm/pterm"
 )
@@ -163,13 +164,13 @@ func resizeRootFs(disk string, mountPoint string) {
 	// Write the string to the file
   err := os.WriteFile("resize.sh", []byte(resizeCmd), 0777)
   if err != nil {
-      fmt.Println("Error writing to file:", err)
+      pterm.Info.Printfln("Error writing to file:", err)
       return
   }
 
-  exec.ExecCommand("sudo", "bash", "./resize.sh")
-  exec.ExecCommand("sudo", "e2fsck", "-f", disk + "p2")
-  exec.ExecCommand("sudo", "resize2fs", disk + "p2")
+  exec.Command("sudo", "bash", "./resize.sh")
+  exec.Command("sudo", "e2fsck", "-f", disk + "p2")
+  exec.Command("sudo", "resize2fs", disk + "p2")
 
 
 	mountMedia(disk, mountPoint)
