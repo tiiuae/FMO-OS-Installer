@@ -173,7 +173,7 @@ func resizeRootFs(disk string, mountPoint string) {
   exec.Command("sudo", "resize2fs", disk + "p2")
 
 
-	mountMedia(disk, mountPoint)
+	mountMedia(disk + "p2", mountPoint)
 }
 
 func mountMedia(disk string, mountPoint string) {
