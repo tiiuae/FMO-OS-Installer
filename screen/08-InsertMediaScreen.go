@@ -153,7 +153,7 @@ func SelectOption() string {
 	return selectedOption
 }
 
-func mountMedia(disk string, mounPoint string) {
+func mountMedia(disk string, mountPoint string) {
 	pterm.Info.Printfln("mkdir -p %s", mountPoint)
 	_, err := global.ExecCommand("mkdir", "-p", mountPoint)
 	if err != 0 {
@@ -169,7 +169,7 @@ func mountMedia(disk string, mounPoint string) {
 	}
 }
 
-func umountMedia(mounPoint string) {
+func umountMedia(mountPoint string) {
 	pterm.Info.Printfln("sudo umount %s", mountPoint)
 	_, err := global.ExecCommand("sudo", "umount", mountPoint)
 	if err != 0 {
