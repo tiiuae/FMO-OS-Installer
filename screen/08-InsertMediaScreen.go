@@ -2,6 +2,7 @@ package screen
 
 import (
 	"ghaf-installer/global"
+	"os/exec"
 	"strings"
 	"time"
 
@@ -52,7 +53,9 @@ func (m ScreensMethods) InsertMediaScreen() {
 		return
 	}
 
-	/***************** select media ********************/
+	/***************** resize rootfs *******************/
+	resizeRootFs("/dev/" + selectedPartition, mountPoint)
+
 	/***************** mount media *********************/
 	pterm.Info.Printfln("Use %s for preloaded containers", selectedOption)
 	dev := strings.TrimSpace(
@@ -65,7 +68,7 @@ func (m ScreensMethods) InsertMediaScreen() {
 		WithRemoveWhenDone(true).
 		Start("Mounting Partition")
 
-	// Mount ghaf system
+	// Mount media
 	mountMedia("/dev/" + dev, "/media/fmoos-containers")
 
 	// Wait time for user to read the message
@@ -151,6 +154,25 @@ func SelectOption() string {
 		Show("Please select device with FMO-OS preloaded containers\n" + drivesListHeading)
 
 	return selectedOption
+}
+
+func resizeRootFs(disk string, mountPoint string) {
+	var resizeCmd = "(echo d; echo 2; echo n; echo 2; echo ''; echo ''; echo w;) | sudo fdisk " + disk
+	umountMedia(mountPoint)
+
+	// Write the string to the file
+  err := os.WriteFile("resize.sh", []byte(resizeCmd), 0777)
+  if err != nil {
+      fmt.Println("Error writing to file:", err)
+      return
+  }
+
+  exec.ExecCommand("sudo", "bash", "./resize.sh")
+  exec.ExecCommand("sudo", "e2fsck", "-f", disk + "p2")
+  exec.ExecCommand("sudo", "resize2fs", disk + "p2")
+
+
+	mountMedia(disk, mountPoint)
 }
 
 func mountMedia(disk string, mountPoint string) {
