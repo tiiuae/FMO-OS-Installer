@@ -137,7 +137,7 @@ func copyData(from string, to string) {
 		}
 	}
 
-	if false {
+	if true {
 		pterm.Info.Printfln("sudo sh -c 'cp -r %s %s'", from, to)
 		msg, err = global.ExecCommand("sudo", "sh", "-c", "cp -r " + from + " " + to)
   	for _, m := range msg {
