@@ -85,7 +85,7 @@ func (m ScreensMethods) InsertMediaScreen() {
 		Start("Mounting Partition")
 
 	// Umount media
-	copyData("/media/fmoos-containers" + "/*", mountPoint + "/var/fogdata/preloaded")
+	copyData("/media/fmoos-containers" + "/*", mountPoint + "/var/fogdata/preloaded/")
 
 	// Wait time for user to read the message
 	time.Sleep(2)
@@ -159,7 +159,7 @@ func SelectOption() string {
 func resizeRootFs(disk string, mountPoint string) {
 	var resizeCmd = "(echo d; echo 2; echo n; echo 2; echo ''; echo ''; echo w;) | sudo fdisk " + disk +
 									"\nsudo e2fsck -y -f " + disk + "p2" +
-									"\nsudo resize2fs " + disk + "p2"
+									"\nsudo resize2fs -f " + disk + "p2"
 
 	umountMedia(mountPoint)
 
