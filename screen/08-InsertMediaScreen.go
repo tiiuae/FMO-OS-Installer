@@ -116,14 +116,20 @@ func (m ScreensMethods) InsertMediaScreen() {
 
 func copyData(from string, to string) {
 	pterm.Info.Printfln("mkdir -p %s", to)
-	_, err := global.ExecCommand("mkdir", "-p", to)
+	msg, err := global.ExecCommand("mkdir", "-p", to)
+  for _, m := range msg {
+		pterm.Info.Printfln(m)
+	}
 	if err != 0 {
 		pterm.Info.Printfln("mkdir -p %s failed..", to)
 		panic(err)
 	}
 
 	pterm.Info.Printfln("sudo cp -r %s %s", from, to)
-	_, err = global.ExecCommand("sudo", "cp", "-r", from, to)
+	msg, err = global.ExecCommand("sudo", "cp", "-r", from, to)
+  for _, m := range msg {
+		pterm.Info.Printfln(m)
+	}
 	if err != 0 {
 		pterm.Info.Printfln("sudo cp -r %s %s failed..", from, to)
 		panic(err)
