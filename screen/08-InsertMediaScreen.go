@@ -157,7 +157,7 @@ func SelectOption() string {
 }
 
 func resizeRootFs(disk string, mountPoint string) {
-	var resizeCmd = "(echo d; echo 2; echo n; echo 2; echo ''; echo ''; echo w;) | sudo fdisk " + disk // + "\nsudo e2fsck -f " + disk + "p2" + "\nsudo resize2fs " + disk + "p2"
+	var resizeCmd = "(echo d; echo 2; echo n; echo 2; echo ''; echo ''; echo w;) | sudo fdisk " + disk + "\nsudo e2fsck -f " + disk + "p2" + "\nsudo resize2fs " + disk + "p2"
 	umountMedia(mountPoint)
 
 	// Write the string to the file
@@ -177,7 +177,7 @@ func resizeRootFs(disk string, mountPoint string) {
 		panic(er)
 	}
 
-	if true {
+	if false {
 		pterm.Info.Printfln("sudo e2fsck -f %s", disk + "p2")
 		msg, er = global.ExecCommand("sudo", "e2fsck", "-f ", disk + "p2")
 		for _, m := range msg {
