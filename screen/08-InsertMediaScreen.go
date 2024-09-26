@@ -177,7 +177,7 @@ func resizeRootFs(disk string, mountPoint string) {
 		panic(er)
 	}
 
-	if false {
+	if true {
 		pterm.Info.Printfln("sudo e2fsck -f %s", disk + "p2")
 		msg, er = global.ExecCommand("sudo", "e2fsck", "-f ", disk + "p2")
 		for _, m := range msg {
