@@ -85,7 +85,7 @@ func (m ScreensMethods) InsertMediaScreen() {
 		Start("Mounting Partition")
 
 	// Umount media
-	copyData("/media/fmoos-containers" + "/*", mountPoint + "/var/fogdata/preloaded/")
+	copyData("/media/fmoos-containers/*", mountPoint + "/var/fogdata/preloaded/")
 
 	// Wait time for user to read the message
 	time.Sleep(2)
@@ -125,14 +125,26 @@ func copyData(from string, to string) {
 		panic(err)
 	}
 
-	pterm.Info.Printfln("sudo cp -r %s %s", from, to)
-	msg, err = global.ExecCommand("sudo", "cp", "-r", from, to)
+	pterm.Info.Printfln("sudo rsync -ah --progress %s %s", from, to)
+	msg, err = global.ExecCommand("sudo", "rsync", "-ah", "--progress", from, to)
   for _, m := range msg {
 		pterm.Info.Printfln(m)
 	}
 	if err != 0 {
-		pterm.Info.Printfln("sudo cp -r %s %s failed..", from, to)
+		pterm.Info.Printfln("sudo rsync -ah --progress %s %s failed..", from, to)
 		panic(err)
+	}
+
+	if false {
+		pterm.Info.Printfln("sudo cp -r %s %s", from, to)
+		msg, err = global.ExecCommand("sudo", "cp", "-r", from, to)
+  	for _, m := range msg {
+			pterm.Info.Printfln(m)
+		}
+		if err != 0 {
+			pterm.Info.Printfln("sudo cp -r %s %s failed..", from, to)
+			panic(err)
+		}
 	}
 }
 
