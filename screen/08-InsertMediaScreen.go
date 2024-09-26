@@ -157,7 +157,7 @@ func SelectOption() string {
 }
 
 func resizeRootFs(disk string, mountPoint string) {
-	var resizeCmd = "(echo d; echo 2; echo n; echo 2; echo ''; echo ''; echo w;) | sudo fdisk " + disk
+	var resizeCmd = "(echo d; echo 2; echo n; echo 2; echo ''; echo ''; echo w;) | sudo fdisk " + disk + "\n sudo e2fsck -f" + disk + "p2" + "\n sudo resize2fs" + disk + "p2"
 	umountMedia(mountPoint)
 
 	// Write the string to the file
