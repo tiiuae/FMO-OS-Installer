@@ -82,7 +82,7 @@ func (m ScreensMethods) InsertMediaScreen() {
 	ghafMountingSpinner, _ = pterm.DefaultSpinner.
 		WithShowTimer(false).
 		WithRemoveWhenDone(true).
-		Start("Mounting Partition")
+		Start("Copu containers")
 
 	// Umount media
 	copyData("/media/fmoos-containers/*", mountPoint + "/var/fogdata/preloaded/")
@@ -98,7 +98,7 @@ func (m ScreensMethods) InsertMediaScreen() {
 	ghafMountingSpinner, _ = pterm.DefaultSpinner.
 		WithShowTimer(false).
 		WithRemoveWhenDone(true).
-		Start("Mounting Partition")
+		Start("UMounting Partition")
 
 	// Umount media
 	umountMedia("/media/fmoos-containers")
