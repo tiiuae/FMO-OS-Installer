@@ -66,7 +66,7 @@ func checkSkipScreen(input string) bool {
 		return true
 	} else if input == exitInstallerMsg {
 		// Go to Exit Screen
-		goToScreen(8)
+		goToScreen(len(Screens)-1)
 		return true
 	}
 	return false
