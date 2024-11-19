@@ -32,11 +32,7 @@ func (m ScreensMethods) PartitionScreen() {
 		drives, _ := global.ExecCommand("lsblk", "-d", "-e7")
 		if len(drives) > 0 {
 			drivesListHeading = "  " + drives[0]
-			for _, d := range drives[1:len(drives)-1] {
-				if strings.Contains(d, "nvme") {
-					drivesList = append(drivesList, d)
-				}
-			}
+			drivesList = append(drivesList, drives[1:len(drives)-1]...)
 		}
 	}
 
