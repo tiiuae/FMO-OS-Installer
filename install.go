@@ -6,7 +6,6 @@ import (
 	"time"
 	"log"
 	"os"
-	"runtime"
 
 	"github.com/pterm/pterm"
 )
