@@ -4,9 +4,21 @@ import (
 	"ghaf-installer/screen"
 	"reflect"
 	"time"
+	"log"
+	"runtime"
 
 	"github.com/pterm/pterm"
 )
+
+func logWithPriority(priority string, message string, args ...interface{}) {
+	_, file, line, ok := runtime.Caller(2) // Get coller info
+	message := fmt.Sprintf(format, args...)
+	if ok {
+		log.Printf("[%s] %s:%d %s", priority, file, line, message)
+	} else {
+		log.Printf("[%s] %s", priority, message)
+	}
+}
 
 func showcase(title string, seconds int, content func()) {
 	pterm.DefaultHeader.WithBackgroundStyle(pterm.NewStyle(pterm.BgBlue)).
@@ -23,6 +35,17 @@ func showcase(title string, seconds int, content func()) {
 func main() {
 	// use for retrieving methods
 	var methodlist screen.ScreensMethods
+
+	// Open log file
+	logFile, err := os.OpenFile("/tmp/installer.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("Can't open log file: %v", err)
+	}
+	defer logFile.Close()
+
+	// Setup logger
+	log.SetOutput(logFile)
+	log.SetFlags(log.Ldate | log.Ltime)
 
 	// Look for all screens in folder ./screen
 	screen.InitScreen()

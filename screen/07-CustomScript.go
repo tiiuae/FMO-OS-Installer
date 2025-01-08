@@ -64,12 +64,23 @@ func (m ScreensMethods) CustomScript() {
 }
 
 func prepareEnvironment() {
+	logWithPriority("DEBUG", "Prepare installation environment. In..")
+
 	paths := strings.Split(string(folderPaths), ";")
+	logWithPriority("DEBUG", "paths: %v", paths)
+
 	checkEnvFile := strings.Split(paths[0], "/")
+	logWithPriority("DEBUG", "checkEnvFile: %v", checkEnvFile)
+
 	if checkEnvFile[len(checkEnvFile)-1] == ".env" {
+		logWithPriority("DEBUG", ".env path has been found")
+
 		envPath = strings.Split(string(folderPaths), ";")[0]
+		logWithPriority("DEBUG", "envPath: %v", envPath)
+
 		f, err := os.OpenFile(envPath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 		if err != nil {
+			logWithPriority("ERROR", "Can not open file: %v", envPath)
 			panic(err)
 		}
 
@@ -78,29 +89,41 @@ func prepareEnvironment() {
 		if _, err = f.WriteString("NETWORK_INTERFACE=" + networkInterface); err != nil {
 			panic(err)
 		}
+	} else {
+		logWithPriority("ERROR", ".env path has been found")
 	}
 
 	// Symlink to simulate installed system
 	symlink := paths[1]
 	// Source location of installed system
 	source := paths[2]
+
+	logWithPriority("DEBUG", "Create new path: %v", mountPoint+source)
 	_, err := global.ExecCommand("sudo", "mkdir", "-p", mountPoint+source)
 	if err != 0 {
+		logWithPriority("ERROR", "Can not create dir: %v",  mountPoint+source)
 		panic(err)
 	}
+
+	logWithPriority("DEBUG", "Create new symlink: %v, %v", mountPoint+source, symlink)
 	_, err = global.ExecCommand("sudo", "ln", "-s", mountPoint+source, symlink)
 	if err != 0 {
+		logWithPriority("ERROR", "Can not create symlink: %v, %v", mountPoint+source, symlink)
 		panic(err)
 	}
 
 	// Create child folders for certificates and config
+	logWithPriority("DEBUG", "Create child folders for certificates and config")
 	paths = paths[3:]
 	for _, folderPath := range paths {
+		logWithPriority("DEBUG", "Create new path: %v", mountPoint+folderPath)
 		_, err := global.ExecCommand("sudo", "mkdir", "-p", mountPoint+folderPath)
 		if err != 0 {
+			logWithPriority("ERROR", "Can not create dir: %v",  mountPoint+folderPath)
 			panic(err)
 		}
 	}
+	logWithPriority("DEBUG", "Prepare installation environment. Out..")
 }
 
 func selectDockerURL() {
