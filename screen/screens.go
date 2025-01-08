@@ -2,6 +2,8 @@ package screen
 
 import (
 	"os"
+	"log"
+	"runtime"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -106,4 +108,14 @@ func RefreshScreen(title string) {
 		Println(title)
 	pterm.Println()
 
+}
+
+func logWithPriority(priority string, message string, args ...interface{}) {
+	_, file, line, ok := runtime.Caller(2) // Get coller info
+	message := fmt.Sprintf(format, args...)
+	if ok {
+		log.Printf("[%s] %s:%d %s", priority, file, line, message)
+	} else {
+		log.Printf("[%s] %s", priority, message)
+	}
 }

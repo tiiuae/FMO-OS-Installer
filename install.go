@@ -5,20 +5,11 @@ import (
 	"reflect"
 	"time"
 	"log"
+	"os"
 	"runtime"
 
 	"github.com/pterm/pterm"
 )
-
-func logWithPriority(priority string, message string, args ...interface{}) {
-	_, file, line, ok := runtime.Caller(2) // Get coller info
-	message := fmt.Sprintf(format, args...)
-	if ok {
-		log.Printf("[%s] %s:%d %s", priority, file, line, message)
-	} else {
-		log.Printf("[%s] %s", priority, message)
-	}
-}
 
 func showcase(title string, seconds int, content func()) {
 	pterm.DefaultHeader.WithBackgroundStyle(pterm.NewStyle(pterm.BgBlue)).
