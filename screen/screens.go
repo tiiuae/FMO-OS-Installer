@@ -3,6 +3,7 @@ package screen
 import (
 	"os"
 	"log"
+	"fmt"
 	"runtime"
 	"path/filepath"
 	"strconv"
@@ -112,7 +113,7 @@ func RefreshScreen(title string) {
 
 func logWithPriority(priority string, message string, args ...interface{}) {
 	_, file, line, ok := runtime.Caller(2) // Get coller info
-	message := fmt.Sprintf(format, args...)
+	message := fmt.Sprintf(message, args...)
 	if ok {
 		log.Printf("[%s] %s:%d %s", priority, file, line, message)
 	} else {
