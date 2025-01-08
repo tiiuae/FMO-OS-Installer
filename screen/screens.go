@@ -111,9 +111,9 @@ func RefreshScreen(title string) {
 
 }
 
-func logWithPriority(priority string, message string, args ...interface{}) {
+func logWithPriority(priority string, format string, args ...interface{}) {
 	_, file, line, ok := runtime.Caller(2) // Get coller info
-	message := fmt.Sprintf(message, args...)
+	message := fmt.Sprintf(format, args...)
 	if ok {
 		log.Printf("[%s] %s:%d %s", priority, file, line, message)
 	} else {
