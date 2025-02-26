@@ -14,14 +14,17 @@ import (
 
 var UidEth = "d3ba46d5-6065-37c7-94a7-0df969aca945"
 var UidMesh = "4f3b719f-6a2a-4c7b-95be-afc4c912ca95"
+var UidExtMesh = "5fbbc161-ac51-49ef-bd02-85ee6d016190"
 var DeviceEth = "eth0"
 var DeviceMesh = "mesh0"
+var ExternalMesh = "externalmesh0"
 var IPConfigFilePathNetVM = "/var/netvm/netconf/"
 var IPConfigFilePathDockerVM = "/var/fogdata/"
 var HostnameConfigFile = "hostname"
 var IPConfigFile = "ip-address"
 var NMConfigFileEth = "WiredEth.nmconnection"
 var NMConfigFileMesh = "WiredMesh.nmconnection"
+var NMConfigFileExtMesh = "ExternalMesh.nmconnection"
 
 var NMTemplate = dataDir + "/NMTemplate"
 var IPAddrTemplate = dataDir + "/IPAddrTemplate"
@@ -107,6 +110,13 @@ func (m ScreensMethods) ConfigureIPScreen() {
 		NMConnection{"WireMesh0", UidMesh, sysIP, DeviceMesh, "", "manual"},
 		NMTemplate,
 		NMConfigFileMesh,
+		IPConfigFilePathNetVM,
+		"600",
+	)
+	writeConnectionFile(
+		NMConnection{"ExternalMesh0", UidExtMesh, sysIP, ExternalMesh, "", "manual"},
+		NMTemplate,
+		NMConfigFileExtMesh,
 		IPConfigFilePathNetVM,
 		"600",
 	)
